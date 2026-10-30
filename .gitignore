@@ -1,0 +1,5 @@
+.env
+seen_videos.json
+__pycache__/
+*.pyc
+venv/
