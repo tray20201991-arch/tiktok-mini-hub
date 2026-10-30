@@ -1,15 +1,15 @@
 import os
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 from dotenv import load_dotenv
-
 load_dotenv()
 
 app = Flask(__name__)
 
-# التوكن يجي من Secrets - مستحيل ينباك!
 BOT_TOKEN = os.getenv("BOT_TOKEN")
-CHANNEL_ID = os.getenv("CHANNEL_ID", "@your_channel")
+CHANNEL_ID = os.getenv("CHANNEL_ID", "@test")
 ADMIN_ID = os.getenv("ADMIN_ID")
+
+ARMY = ["ضحك","حزن","حب","رعب","اكشن","رياضة","طبخ","موضة","سيارات","العاب","حيوانات","اطفال","موسيقى","رقص","سفر","تعليم","تكنولوجيا","مال","صحة","جمال","ترند"]
 
 @app.route('/')
 def index():
@@ -17,9 +17,8 @@ def index():
 
 @app.route('/health')
 def health():
-    return f"Bot is running! Token protected: {BOT_TOKEN[:5]}..."
+    status = "✅ محمي" if BOT_TOKEN else "❌ ضيف التوكن بالسكرت"
+    return f"{status} | Army: {len(ARMY)} | Channel: {CHANNEL_ID}"
 
 if __name__ == '__main__':
-    if not BOT_TOKEN:
-        print("❌ ضيف BOT_TOKEN بالـ Secrets مال Replit!")
     app.run(host='0.0.0.0', port=8080)
