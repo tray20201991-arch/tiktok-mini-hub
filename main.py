@@ -1,42 +1,25 @@
 import os
 from flask import Flask, render_template
-from threading import Thread
-import telebot
-from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
+from dotenv import load_dotenv
 
-TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
-APP_URL = os.environ.get("APP_URL", "")
+load_dotenv()
 
 app = Flask(__name__)
-bot = telebot.TeleBot(TOKEN, threaded=False) if TOKEN else None
+
+# التوكن يجي من Secrets - مستحيل ينباك!
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+CHANNEL_ID = os.getenv("CHANNEL_ID", "@your_channel")
+ADMIN_ID = os.getenv("ADMIN_ID")
 
 @app.route('/')
-def home():
-    return "Bot is Running ✅ - /app/tiktok"
+def index():
+    return render_template('index.html')
 
-@app.route('/app/tiktok')
-def tiktok_app():
-    return render_template('tiktok.html')
-
-@bot.message_handler(commands=['start'])
-def start(message):
-    if not bot:
-        return
-    markup = InlineKeyboardMarkup()
-    if APP_URL:
-        markup.add(InlineKeyboardButton(text="🎵 افتح تيك توك", web_app=WebAppInfo(url=APP_URL)))
-        bot.send_message(message.chat.id, "اهلا بيك! دوس الزر 👇", reply_markup=markup)
-    else:
-        bot.send_message(message.chat.id, "البوت شغال ✅")
-
-def run_flask():
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host='0.0.0.0', port=port)
-
-def run_bot():
-    if bot:
-        bot.infinity_polling()
+@app.route('/health')
+def health():
+    return f"Bot is running! Token protected: {BOT_TOKEN[:5]}..."
 
 if __name__ == '__main__':
-    Thread(target=run_flask).start()
-    run_bot()
+    if not BOT_TOKEN:
+        print("❌ ضيف BOT_TOKEN بالـ Secrets مال Replit!")
+    app.run(host='0.0.0.0', port=8080)
