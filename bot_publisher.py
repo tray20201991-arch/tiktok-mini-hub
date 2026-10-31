@@ -8,9 +8,9 @@ logging.basicConfig(
     level=logging.INFO,
 )
 
-# التوكن وقنوات العمل
-PUBLISHER_TOKEN = os.getenv("PUBLISHER_TOKEN", "حط_توكن_بوت_النشر_هنا")
-SECRET_CHANNEL = "@your_secret_channel"  # قناتك السرية (مصدر الفيديوهات الحارة)
+# توكن بوت النشر ومعاريف القنوات المحدثة يا أسطورة
+PUBLISHER_TOKEN = "8093135920:AAGUUS6k6VPTg0RODMP27FSpI0SdMHquQ4U"
+SECRET_CHANNEL = "@st00rg"  # قناتك السرية المصدر للفيديوهات
 DESTINATION_CHANNEL = "@your_destination_channel"  # قناتك العامة النهائية
 
 # ذاكرة مانعة للتكرار الجذري
@@ -28,7 +28,7 @@ async def fetch_and_boost_trending(
   if chat_username and f"@{chat_username.lower()}" == SECRET_CHANNEL.lower():
     msg_id = message.message_id
 
-    # إذا الفيديو منشور مسبقاً،عبره فوراً بدون أي تأخير لمنع التكرار
+    # إذا الفيديو منشور مسبقاً، عبره فوراً بدون أي تأخير لمنع التكرار
     if msg_id in processed_ids:
       return
 
@@ -43,7 +43,7 @@ async def fetch_and_boost_trending(
     elif any(w in caption for w in ["سيارات", "تعديل", "محرك", "حلبة"]):
       category_hashtag = "#سيارات #تعديل_موتورات"
 
-    # تنسيق الوصف مع بصمتك الملكية
+    # تنسيق الوصف مع بصمتك الملكية وحقوقك
     new_caption = (
         f"{caption}\n\n{category_hashtag}\n🔥 [فيديو صاعد ومكسب]\n📌 ID: #{msg_id}"
         f" | إشراف: حسين 👑"
