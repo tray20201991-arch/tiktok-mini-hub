@@ -1,88 +1,68 @@
 import logging
-import os
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, WebAppInfo
-from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
+from telegram.ext import (
+    ApplicationBuilder,
+    CommandHandler,
+    ContextTypes,
+)
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     level=logging.INFO,
 )
 
-# توكن بوت الميني أب (الثاني)
-WEBAPP_TOKEN = os.getenv("WEBAPP_TOKEN", "حط_توكن_بوت_الميني_اب_هنا")
-# رابط الميني أب مالك (مثل Vercel أو الاستضافة اللي راح ترفع عليها الواجهة)
-WEBAPP_URL = "https://your-mini-app-url.com"
-# معرف قناتك السرية حتى نسحب صورتها تلقائياً
-SECRET_CHANNEL = "@your_secret_channel"
-
-# معاريف التواصل الرسمية الخاصة بك
-TELEGRAM_USER = "IME44"
-INSTAGRAM_USER = "kw8c"
+# توكن بوت الميني أب ومعاريف القنوات المحدثة يا أسطورة
+WEBAPP_TOKEN = "8608740193:AAHAVL3cXgIltdNMSbb2_pgW9Nm_VXhR-ec"
+SECRET_CHANNEL_USERNAME = (
+    "st00rg"  # يوزر قناتك بدون @ لسحب الصورة تلقائياً
+)
+WEBAPP_URL = "https://your-webapp-url.com/index.html"  # رابط الميني أب الخاص بك
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
   user = update.effective_user
-  chat_id = update.effective_chat.id
 
-  # رسالة الترحيب الفخمة
-  welcome_text = (
-      f"مرحباً بك يا {user.first_name} في عالم التيك توك الحصري 🎬🔥\n\n"
-      "أقوى الفيديوهات الترند والحارة، تصفح سريع، أوفلاين، وبأقسام متنوعة.\n\n"
-      "👇 اضغط على الزر أدناه لدخول التطبيق واستمتع بالتجربة:"
-  )
-
-  # الأزرار المائية الملونة والفخمة
+  # أزرار الميني أب الملكية
   keyboard = [
       [
           InlineKeyboardButton(
-              "🚀 افتح Mini App الملكي", web_app=WebAppInfo(url=WEBAPP_URL)
-          )
-      ],
-      [
-          InlineKeyboardButton(
-              "📢 تليجرام التواصل", url=f"https://t.me/{TELEGRAM_USER}"
-          ),
-          InlineKeyboardButton(
-              "📸 انستجرام", url=f"https://instagram.com/{INSTAGRAM_USER}"
-          ),
-      ],
-      [
-          InlineKeyboardButton(
-              "⚠️ الإبلاغ عن مشكلة", url=f"https://t.me/{TELEGRAM_USER}"
+              "🚀 فتح منصة تيك توك العراق (Mini App)",
+              web_app=WebAppInfo(url=WEBAPP_URL),
           )
       ],
   ]
   reply_markup = InlineKeyboardMarkup(keyboard)
 
+  welcome_message = (
+      f"هلا بيك يا أسطورة **{user.first_name}** في المنصة العراقية الأقوى!\n\n"
+      "🔥 تصفح أحدث الفيديوهات الحارة، الترندات، والرياضة بتصميم تيك توك الأنيق.\n"
+      "⚡ السيستم يعمل بإشراف مباشر من **حسين 👑**.\n\n"
+      "اختر من الزر بالأسفل للبدء فوراً:"
+  )
+
   try:
-    # جلب صورة بروفايل القناة السرية تلقائياً
-    chat = await context.bot.get_chat(SECRET_CHANNEL)
-    photos = await chat.get_profile_photos()
-
-    if photos.total_count > 0:
-      file_id = photos.photos[0][-1].file_id
-      await context.bot.send_photo(
-          chat_id=chat_id,
-          photo=file_id,
-          caption=welcome_text,
-          reply_markup=reply_markup,
+    # محاولة سحب صورة القناة كغلاف ترحيبي فخم
+    chat = await context.bot.get_chat(f"@{SECRET_CHANNEL_USERNAME}")
+    if chat.photo:
+      photo_file = await context.bot.get_file(chat.photo.big_file_id)
+      photo_url = photo_file.file_path
+      await update.message.reply_photo(
+          photo=photo_url, caption=welcome_message, reply_markup=reply_markup
       )
-    else:
-      await context.bot.send_message(
-          chat_id=chat_id, text=welcome_text, reply_markup=reply_markup
-      )
-
+      return
   except Exception as e:
-    print(f"خطأ في سحب صورة القناة: {e}")
-    await context.bot.send_message(
-        chat_id=chat_id, text=welcome_text, reply_markup=reply_markup
-    )
+    print(f"تعذر جلب صورة القناة، سيتم إرسال الرسالة النصية: {e}")
+
+  # رسالة احتياطية في حال تعذر سحب الصورة
+  await update.message.reply_text(
+      text=welcome_message, reply_markup=reply_markup, parse_mode="Markdown"
+  )
 
 
 def main():
   application = ApplicationBuilder().token(WEBAPP_TOKEN).build()
   application.add_handler(CommandHandler("start", start))
-  print("بوت الميني أب والترحيب يعمل بكفاءة...")
+  print("بوت الميني أب والترحيب يعمل بكامل طاقته...")
   application.run_polling()
 
 
