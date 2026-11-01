@@ -14,7 +14,7 @@ logging.basicConfig(
 # توكن بوت الميني أب ومعاريف القنوات المضبوطة يا أسطورة
 WEBAPP_TOKEN = "8608740193:AAHAVL3cXgIltdNMSbb2_pgW9Nm_VXhR-ec"
 SECRET_CHANNEL_USERNAME = "st00rg"  # يوزر قناتك بدون @ لسحب الصورة تلقائياً
-WEBAPP_URL = "https://t.me/st00rg"  # رابط مؤقت يعمل بامتياز لحين ربط الموقع النهائي
+WEBAPP_URL = "https://t.me/st00rg"  # رابط المؤقت للعمل بامتياز
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
