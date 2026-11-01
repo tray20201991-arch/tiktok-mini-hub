@@ -8,10 +8,10 @@ logging.basicConfig(
     level=logging.INFO,
 )
 
-# توكن بوت النشر ومعاريف القنوات المحدثة يا أسطورة
+# التوكنات والمعاريف الملكية المضبوطة لك يا حسين
 PUBLISHER_TOKEN = "8093135920:AAGUUS6k6VPTg0RODMP27FSpI0SdMHquQ4U"
-SECRET_CHANNEL = "@st00rg"  # قناتك السرية المصدر للفيديوهات
-DESTINATION_CHANNEL = "@your_destination_channel"  # قناتك العامة النهائية
+SECRET_CHANNEL = "@st00rg"  # قناة المصدر للفيديوهات
+DESTINATION_CHANNEL = "@st00rg"  # قناة النشر العامة النهائية
 
 # ذاكرة مانعة للتكرار الجذري
 processed_ids = set()
@@ -28,7 +28,7 @@ async def fetch_and_boost_trending(
   if chat_username and f"@{chat_username.lower()}" == SECRET_CHANNEL.lower():
     msg_id = message.message_id
 
-    # إذا الفيديو منشور مسبقاً، عبره فوراً بدون أي تأخير لمنع التكرار
+    # إذا الفيديو منشور مسبقاً، عبره فوراً بدون أي تكرار
     if msg_id in processed_ids:
       return
 
@@ -74,7 +74,7 @@ def main():
           filters.Chat(username=SECRET_CHANNEL), fetch_and_boost_trending
       )
   )
-  print("بوت الفلترة السريعة والترندات يعمل بكامل طاقته...")
+  print("بوت النشر السريع يعمل بكامل طاقته...")
   application.run_polling()
 
 
