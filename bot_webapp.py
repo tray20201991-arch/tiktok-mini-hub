@@ -11,12 +11,10 @@ logging.basicConfig(
     level=logging.INFO,
 )
 
-# توكن بوت الميني أب ومعاريف القنوات المحدثة يا أسطورة
+# توكن بوت الميني أب ومعاريف القنوات المضبوطة يا أسطورة
 WEBAPP_TOKEN = "8608740193:AAHAVL3cXgIltdNMSbb2_pgW9Nm_VXhR-ec"
-SECRET_CHANNEL_USERNAME = (
-    "st00rg"  # يوزر قناتك بدون @ لسحب الصورة تلقائياً
-)
-WEBAPP_URL = "https://your-webapp-url.com/index.html"  # رابط الميني أب الخاص بك
+SECRET_CHANNEL_USERNAME = "st00rg"  # يوزر قناتك بدون @ لسحب الصورة تلقائياً
+WEBAPP_URL = "https://t.me/st00rg"  # رابط مؤقت يعمل بامتياز لحين ربط الموقع النهائي
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
